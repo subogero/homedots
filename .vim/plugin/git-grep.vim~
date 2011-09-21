@@ -1,5 +1,4 @@
-"let g:gitgrepprg="git\\ grep\\ -n"
-let g:gitgrepprg="ggrep"
+let g:gitgrepprg="git\\ grep\\ -n"
 let g:gitroot="`git rev-parse --show-cdup`"
 
 function! GitGrep(args)
