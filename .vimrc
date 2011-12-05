@@ -16,6 +16,7 @@ set noswf
 
 "Key mapping for window switching and movement
 map <F5> :buffers<CR>:buffer<Space>
+map <F7> :setlocal spell spelllang=hu<Enter>
 map <A-Left>  <C-w><Left>
 map <A-Right> <C-w><Right>
 map <A-Up>    <C-w><Up>
