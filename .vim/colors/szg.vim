@@ -35,7 +35,7 @@ hi Error		guifg=red		guibg=black	gui=underline	ctermfg=red
 
 hi Todo			guifg=black		guibg=orange	ctermfg=black	ctermbg=darkYellow
 hi Cursor		guifg=black		guibg=white		ctermfg=black	ctermbg=white
-hi Search		guifg=black		guibg=orange	ctermfg=black	ctermbg=darkYellow
+hi Search		guifg=black		guibg=orange	ctermfg=white	ctermbg=blue
 hi IncSearch	guifg=black		guibg=yellow	ctermfg=black	ctermbg=darkYellow
 hi LineNr		guifg=gray		ctermfg=darkGray
 hi title		guifg=white	gui=bold	cterm=bold

@@ -11,12 +11,18 @@ set title
 set hlsearch
 set incsearch
 set noswf
+set encoding=utf-8
+set fileencoding=utf-8
+set colorcolumn=80
+hi ColorColumn ctermbg=blue
 "set cindent
 "set smarttab
 
 "Key mapping for window switching and movement
 map <F5> :buffers<CR>:buffer<Space>
 map <F7> :setlocal spell spelllang=hu<Enter>
+map ]s ]sz=
+map [s [sz=
 map <A-Left>  <C-w><Left>
 map <A-Right> <C-w><Right>
 map <A-Up>    <C-w><Up>

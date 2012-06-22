@@ -279,3 +279,4 @@ hi def link cBoolean Boolean
 
 " Abbreviations
 iab /// /* */<Left><Left><Left>
+iab \\\ /*<LF> *<LF>*/<Up>
