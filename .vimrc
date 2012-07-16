@@ -18,6 +18,11 @@ hi ColorColumn ctermbg=blue
 "set cindent
 "set smarttab
 
+"Window resizing
+map <C-Left>  <C-W><
+map <C-Right> <C-W>>
+map <C-Up>    <C-W>+
+map <C-Down>  <C-W>-
 "Window switching
 map <A-Left>  <C-w><Left>
 map <A-Right> <C-w><Right>
