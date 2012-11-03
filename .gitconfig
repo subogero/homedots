@@ -1,0 +1,7 @@
+[user]
+	name = SZABO Gergely
+	email = szg@subogero.com
+[color]
+	ui = auto
+[alias]
+	lg = log --oneline --graph --decorate --all
