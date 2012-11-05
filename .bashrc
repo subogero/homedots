@@ -17,32 +17,3 @@ alias mp='mplayer -subcp latin2'
 alias kr='diatheke -b HunKar -k'
 alias kj='diatheke -b KJV -k'
 alias al='diatheke -b Aleppo -k'
-
-# Cygwin specific aliases
-alias cha='start chat trailer 55555 & disown'
-alias chs='start chat trailer 55556 & disown'
-alias man='LANG=C.ISO-8859-1 man'
-
-# Cygwin specific functions
-winargv()
-{
-    cmd=$1;
-    shift;
-    argv=();
-    for i in $@;
-    do
-        j=`cygpath -da -- $i 2>/dev/null` && i=$j;
-        argv+=("$i");
-    done;
-    $cmd ${argv[@]}
-}
-
-mapi()
-{
-    winargv mapis $@
-}
-
-mp()
-{
-    winargv mplayer $@
-}
