@@ -16,6 +16,7 @@ set fileencoding=utf-8
 set colorcolumn=80
 hi ColorColumn ctermbg=blue
 let g:netrw_winsize=""
+let g:netrw_sort_sequence='[\/]$,^\.,*,\.bak$,~$'
 "set cindent
 "set smarttab
 
