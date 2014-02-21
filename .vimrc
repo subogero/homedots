@@ -54,6 +54,8 @@ imap <F5> <Esc>:buffers<CR>:buffer<Space>
 map <F7> :setlocal spell spelllang=hu<Enter>
 map ]s ]sz=
 map [s [sz=
-
+"Automatically open and close quickfix
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
 "Auto-source this file every time it's written
 au! BufWritePost ~/.vimrc source %
