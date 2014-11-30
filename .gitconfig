@@ -5,3 +5,4 @@
 	ui = auto
 [alias]
 	lg = log --oneline --graph --decorate --all
+	st = status
