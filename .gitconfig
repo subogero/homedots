@@ -5,4 +5,10 @@
 	ui = auto
 [alias]
 	lg = log --oneline --graph --decorate --all
+	lgt = log --oneline --graph --decorate
+	lgv = log --graph --decorate --all
+	fuck = reset --hard
 	st = status
+	difi = diff --cached HEAD
+	ff = !sh -c 'git branch -f $1 origin/$1' --
+	fall = !sh -c 'git fetch --all && git branch -r | sed /HEAD/d | grep /_ | xargs git branch -dr' --
