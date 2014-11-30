@@ -12,6 +12,7 @@ alias og='szg -e'
 alias gdb='gdb -q'
 alias make='make --no-print-directory'
 alias mp='mplayer -subcp latin2'
+alias vi='vim -O'
 
 # Linux specifc aliases
 alias kr='diatheke -b HunKar -k'
