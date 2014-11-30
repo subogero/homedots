@@ -14,6 +14,8 @@ set noswf
 set encoding=utf-8
 set fileencoding=utf-8
 set colorcolumn=80
+hi Trail ctermbg=blue
+match Trail /\s\+$/
 hi ColorColumn ctermbg=blue
 let g:netrw_winsize=""
 let g:netrw_sort_sequence='[\/]$,^\.,*,\.bak$,~$'
