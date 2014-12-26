@@ -6,7 +6,7 @@ OMX=http://omxplayer.sconde.net/
 DEB=`curl $OMX | sed -rn 's/Download \.deb.+<a href="(.+)">omxplayer.+$/\1/p' | head -n1`
 [ -z "$DEB" ] && echo deb not found && exit 2
 wget -nc $OMX$DEB
-dpkg-scanpackages . | gzip -9cf > Packages.gz
-dpkg-scansources  . | gzip -9cf > Sources.gz
+dpkg-scanpackages -m . | gzip -9cf > Packages.gz
+dpkg-scansources     . | gzip -9cf > Sources.gz
 cd ..
 rsync -avz deb/ subogero.com:subogero/linux/deb
