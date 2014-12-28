@@ -2,8 +2,8 @@
 rsync -avz subogero.com:subogero/linux/deb . || exit 1
 for i in $@; do cp $i/* deb; done
 cd deb
-OMX=http://omxplayer.sconde.net/
-DEB=`curl $OMX | sed -rn 's/Download \.deb.+<a href="(.+)">omxplayer.+$/\1/p' | head -n1`
+OMX=http://omxplayer.sconde.net
+DEB=`curl $OMX | sed -rn 's/^.+Download \.deb.+<a href="(.+)">omxplayer.+$/\1/p' | head -n1`
 [ -z "$DEB" ] && echo deb not found && exit 2
 wget -nc $OMX$DEB
 dpkg-scanpackages -m . | gzip -9cf > Packages.gz
