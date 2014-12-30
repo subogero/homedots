@@ -50,3 +50,20 @@ xterm*|rxvt*)
 *)
     ;;
 esac
+# Sync dotfiles with GitHub
+LASTSYNC=`cat .lastsync 2>/dev/null`
+[ -z "$LASTSYNC" ] && LASTSYNC=0
+DT=$((`date +%s` - LASTSYNC))
+if [ $DT -gt 36000 ]; then
+    echo Dotfiles not synced since $DT [s]
+    if git diff --quiet HEAD && [ `git rev-parse --abbrev-ref HEAD` = master ]; then
+        if git pull origin master; then
+            date +%s > .lastsync
+        else
+            git reset --hard
+        fi
+    else
+        echo Local dotfile status:
+        git status
+    fi
+fi
