@@ -8,5 +8,6 @@ DEB=`curl $OMX | sed -rn 's/^.+Download \.deb.+<a href="(.+)">omxplayer.+$/\1/p'
 wget -nc $OMX$DEB
 dpkg-scanpackages -m . | gzip -9cf > Packages.gz
 dpkg-scansources     . | gzip -9cf > Sources.gz
+createrepo --database .
 cd ..
 rsync -avz deb/ subogero.com:subogero/linux/deb
