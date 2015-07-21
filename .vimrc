@@ -56,6 +56,9 @@ imap <F5> <Esc>:buffers<CR>:buffer<Space>
 map <F7> :setlocal spell spelllang=hu<Enter>
 map ]s ]sz=
 map [s [sz=
+"cw what it was meant to do: change to next Word
+map cw dwi
+map c2w d2wi
 "Automatically open and close quickfix
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
