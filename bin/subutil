@@ -1,0 +1,130 @@
+#!/usr/bin/perl
+sub help {
+    my $st = shift;
+    open STDOUT, ">&STDERR" if $st;
+    print <<EOF;
+Usage: subutil [-f <framerate>] [--dt time-offset] -o file inputfile
+
+-f fr	mandatory framerate, if any file in txt format
+--dt	in [s], substracted from input-file timestamps
+-o file	outputfile
+EOF
+    exit $st;
+}
+
+help 0 if $ARGV[0] eq '-h';
+
+my %parsers = (
+    srt => \&parse_srt,
+    txt => \&parse_txt,
+);
+my %emitters = (
+    srt => \&emit_srt,
+    txt => \&emit_txt,
+);
+my ($fps, $ofile, $iformat, $oformat);
+my $dt = 0;
+
+while (@ARGV) {
+    if ($ARGV[0] eq '-f') {
+        shift;
+        $fps = shift;
+    } elsif (@ARGV[0] eq '--dt') {
+        shift;
+        $dt = shift;
+    } elsif ($ARGV[0] eq '-o') {
+        shift;
+        $ofile = shift;
+        ($oformat = lc $ofile) =~ s/^.*\.([^.]+)$/$1/;
+    } else {
+        last;
+    }
+}
+
+open STDOUT, ">$ofile" if $ofile;
+
+my $i = 1;
+my $sub;
+while (<>) {
+    s/\n|\r//g;
+    unless ($iformat) {
+        /^\d$/ and $iformat = 'srt';
+        /^{(\d+)}{(\d+)}({.*})?(.+)/ and $iformat = 'txt';
+        help 1 unless $iformat;
+        $oformat //= $iformat;
+        help 1 if not $fps and ($iformat eq 'txt' || $oformat eq 'txt');
+    }
+    $sub = $parsers{$iformat}($_, $sub);
+    $sub = $emitters{$oformat}($sub);
+}
+
+sub parse_txt {
+    my ($line, $sub) = @_;
+    $line =~ /^{(\d+)}{(\d+)}({.*})?(.+)/;
+    my ($f_start, $f_end, $txt) = ($1, $2, $4);
+    @{$sub}{qw(t0 t1)} = map { $_ / $fps } ($f_start, $f_end);
+    ($sub->{text} = $txt) =~ s/\|/\n/g;
+    $sub->{print} = 1;
+    return $sub;
+}
+
+sub emit_txt {
+    my $sub = shift;
+    return $sub unless $sub->{print};
+    $sub->{t0} -= $dt;
+    $sub->{t1} -= $dt;
+    my ($f0, $f1) = map { int($_ * $fps) } @{$sub}{qw(t0 t1)};
+    (my $txt = $sub->{text}) =~ s/\n/|/g;
+    print "{$f0}{$f1}$txt\n";
+    return;
+}
+
+sub parse_srt {
+    my ($line, $sub) = @_;
+    not defined $sub and $line =~ /^\d+$/ and return {};
+    if ($line =~ /^0?(\d+?):0?(\d+?):0?(.+) --> 0?(\d+?):0?(\d+?):0?(.+)/) {
+        my ($h0, $m0, $s0, $h1, $m1, $s1) = ($1, $2, $3, $4, $5, $6);
+        $s0 =~ s/,/./;
+        $s1 =~ s/,/./;
+        $sub->{t0} = 3600*$h0 + 60*$m0 + $s0;
+        $sub->{t1} = 3600*$h1 + 60*$m1 + $s1;
+    } elsif ($line) {
+        $sub->{text} = $sub->{text} ? join("\n", $sub->{text}, $line) : $line;
+    } else {
+        $sub->{print} = 1;
+    }
+    return $sub;
+}
+
+sub emit_srt {
+    my $sub = shift;
+    return $sub unless $sub->{print};
+    $sub->{t0} -= $dt;
+    $sub->{t1} -= $dt;
+    my ($t_start, $t_end) = map { format_time($_) } @{$sub}{qw(t0 t1)};
+    print <<EOF;
+$i
+$t_start --> $t_end
+$sub->{text}
+
+EOF
+    $i++;
+    return;
+}
+
+sub format_time {
+    my $t = shift;
+    my $fr = $t - int $t;
+    my $s = $t % 60;
+    $s += $fr;
+    $t -= $s;
+    $t /= 60;
+    my $m = $t % 60;
+    $t -= $m;
+    $t /= 60;
+    my $h = $t % 60;
+    my $ts = sprintf "%d:%d:%5.3f", $h, $m, $s;
+    $ts =~ s/\b(\d)\b/0$1/g;
+    $ts =~ s/\./,/;
+    return $ts;
+}
