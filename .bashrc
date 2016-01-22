@@ -1,7 +1,12 @@
 HISTCONTROL=erasedups
 
 export LC_COLLATE=C
+export LC_ALL=C
+export LANGUAGE=$LANG
+
 export EDITOR=vi
+
+PATH=$PATH:~/bin
 
 # General aliases
 alias grep='grep --color=auto'
