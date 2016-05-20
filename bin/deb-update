@@ -1,12 +1,31 @@
 #!/bin/sh
+while [ "$1" ]; do
+	case $1 in
+	-o) omx=1 && shift;;
+	-d) dry=1 && shift;;
+	-h) cat <<EOF && exit;;
+USAGE: deb-update [-o] [-d] [-h] folders
+Update the linux.subogero.com/deb package repo from folders containing debs.
+Folders may be on remote machines, indicated by SSH URLs like host:folder.
+OPTIONS:
+ -o	get omxplayer deb from http://omxplayer.sconde.net
+ -d	dry run, don't upload
+ -h	print this help and exit
+EOF
+	*) break;;
+	esac
+done
 SERVER=10.0.77.2
 rsync -avz $SERVER:subogero/linux/deb . || exit 1
 for i in $@; do scp $i/* deb; done
 cd deb
-#OMX=http://omxplayer.sconde.net
-#DEB=`curl $OMX | sed -rn 's/^.+Download \.deb.+<a href="(.+)">omxplayer.+$/\1/p' | head -n1`
-#[ -z "$DEB" ] && echo deb not found && exit 2
-#wget -nc $OMX$DEB
+if [ "$omx" ]; then
+	OMX=http://omxplayer.sconde.net
+	DEB=`curl $OMX | sed -rn 's/^.+Download \.deb.+<a href="(.+)">omxplayer.+$/\1/p' | head -n1`
+	[ -z "$DEB" ] && echo deb not found && exit 2
+	wget -nc $OMX$DEB
+fi
+[ "$dry" ] && exit 0
 dpkg-scanpackages -m . | gzip -9cf > Packages.gz
 dpkg-scansources     . | gzip -9cf > Sources.gz
 createrepo --database .
