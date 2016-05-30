@@ -11,7 +11,7 @@ PATH=$PATH:~/bin
 # General aliases
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
-alias la='ls -lA'
+alias la='ls -lAh'
 alias me='mcedit'
 alias og='szg -e'
 alias gdb='gdb -q'
