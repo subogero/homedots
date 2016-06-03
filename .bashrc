@@ -1,7 +1,6 @@
 HISTCONTROL=erasedups
 
 export LC_COLLATE=C
-export LC_ALL=C
 export LANGUAGE=$LANG
 
 export EDITOR=vi
