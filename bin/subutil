@@ -41,15 +41,18 @@ while (@ARGV) {
     }
 }
 
+print STDERR "file $ARGV[0] ofile $ofile\n";
 open STDOUT, ">$ofile" if $ofile;
 
 my $i = 1;
 my $sub;
 while (<>) {
-    s/\n|\r//g;
+    s/^\xEF\xBB\xBF//; # Remove the bloody UTF8 BOM
+    s/\n|\r//g; # chomp ANY kind of linefeed
     unless ($iformat) {
-        /^\d$/ and $iformat = 'srt';
-        /^{(\d+)}{(\d+)}({.*})?(.+)/ and $iformat = 'txt';
+        $iformat = 'srt' if /^\d$/;
+        $iformat = 'txt' if /^{(\d+)}{(\d+)}({.*})?(.+)/;
+        print STDERR "iformat $iformat\n";
         help 1 unless $iformat;
         $oformat //= $iformat;
         help 1 if not $fps and ($iformat eq 'txt' || $oformat eq 'txt');
