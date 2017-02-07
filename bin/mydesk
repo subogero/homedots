@@ -1,0 +1,4 @@
+#!/bin/sh
+dconf write /org/mate/panel/toplevels/bottom/auto-hide true
+MALLOC_PERTURB_=0 MALLOC_CHECK_=0 firefox --new-window https://mydesk.morganstanley.com 2>/dev/null
+dconf write /org/mate/panel/toplevels/bottom/auto-hide false
