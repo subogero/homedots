@@ -54,3 +54,6 @@ xterm*|rxvt*)
 *)
     ;;
 esac
+
+# Bash completion for Git
+. /usr/share/bash-completion/completions/git
