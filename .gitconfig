@@ -3,6 +3,13 @@
 	email = szg@subogero.com
 [color]
 	ui = auto
+[color "status"]
+	changed = red bold
+	untracked = red bold
+	unmerged = red bold
+	nobranch = red bold
+[color "diff"]
+	old = red bold
 [alias]
 	lg = log --oneline --graph --decorate --all
 	lgt = log --oneline --graph --decorate
