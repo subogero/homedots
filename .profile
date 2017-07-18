@@ -21,14 +21,16 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 # SSH Agent
-[ "$SSH_AUTH_SOCK" ] || export SSH_AUTH_SOCK=~/.ssh/.ssh-socket
-echo --- LIST ADDED KEYS ---
-ssh-add -l
-if [ $? = 2 ]; then
-  echo --- ADD KEYS ---
-  rm -f ~/.ssh/.ssh-{socket,agent-pid,script}
-  ssh-agent -a $SSH_AUTH_SOCK 2>/dev/null >~/.ssh/.ssh-script
-  . ~/.ssh/.ssh-script >/dev/null
-  echo $SSH_AGENT_PID >~/.ssh/.ssh-agent-pid
-  ssh-add .ssh*/id_rsa
+if [ -z "$DISPLAY" -a -z "$SSH_AUTH_SOCK" ]; then
+  export SSH_AUTH_SOCK=~/.ssh/.ssh-socket
+  echo --- LIST ADDED KEYS ---
+  ssh-add -l
+  if [ $? = 2 ]; then
+    echo --- ADD KEYS ---
+    rm -f ~/.ssh/.ssh-{socket,agent-pid,script}
+    ssh-agent -a $SSH_AUTH_SOCK 2>/dev/null >~/.ssh/.ssh-script
+    . ~/.ssh/.ssh-script >/dev/null
+    echo $SSH_AGENT_PID >~/.ssh/.ssh-agent-pid
+    ssh-add .ssh*/id_rsa
+  fi
 fi
