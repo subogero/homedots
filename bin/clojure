@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ -d ~/.m2/repository/org/clojure/clojure/1.8.0 ]; then
+	/usr/bin/java -cp ~/.m2/repository/org/clojure/clojure/1.8.0/clojure-1.8.0.jar clojure.main "$@"
+else
+	/usr/bin/clojure "$@"
+fi
