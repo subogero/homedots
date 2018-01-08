@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Getopt::Long;
+
+my $o = { size => '1280x720', outputdir => '.', rename => '(s\d\de\d\d)' };
+GetOptions $o, "size|s=s", "outputdir|o=s", "rename=s", "dry|d";
+
+die "Wrong size format $o->{size}" unless $o->{size} =~ /^\d+x\d+$/;
+eval { 'foo' =~ /$o->{rename}/ };
+die "Wrong rename regex $o->{rename}: $@" if $@;
+die "Output dir $o->{outputdir} does not exist" unless -d $o->{outputdir};
+
+foreach my $mkv (glob "*.mkv") {
+    (my $base = $mkv) =~ s/\.mkv$//;
+    my @captured = $base =~ /$o->{rename}/i;
+    my $name = join '', @captured;
+    my $obase = "$o->{outputdir}/$name";
+    my $cmds = qq(ffmpeg -i "$mkv" "$obase.srt");
+    my $cmdm = qq(ffmpeg -i "$mkv" -strict -3 -s $o->{size} "$obase.mp4");
+    print "$cmds\n";
+    system "$cmds\n" unless $o->{dry};
+    print "$cmdm\n";
+    system "$cmdm\n" unless $o->{dry};
+}
